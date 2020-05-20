@@ -3,7 +3,6 @@ import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Base64;
 
 public class SudokuFrame extends JFrame {
@@ -91,12 +90,48 @@ public class SudokuFrame extends JFrame {
             activeY = y;
         }
 
-        public void changeNumberInActiveCell(int i) {
+        public void moveActiveCell(String direction) {
+            if (activeX == null || activeY == null) {
+                return;
+            }
+
+            switch (direction) {
+                case "UP": {
+                    // Only move if not already at top
+                    if (activeY > 0) {
+                        setActiveCell(activeX, activeY - 1);
+                    }
+                    break;
+                }
+                case "DOWN": {
+                    // Only move if not already at bottom
+                    if (activeY < 8) {
+                        setActiveCell(activeX, activeY + 1);
+                    }
+                    break;
+                }
+                case "LEFT": {
+                    // Only move if not already at leftmost pos
+                    if (activeX > 0) {
+                        setActiveCell(activeX - 1, activeY);
+                    }
+                    break;
+                }
+                case "RIGHT": {
+                    // Only move if not already at rightmost pos
+                    if (activeX < 8) {
+                        setActiveCell(activeX + 1, activeY);
+                    }
+                }
+            }
+        }
+
+        public void changeNumberInActiveCell(String s) {
             if (activeX != null && activeY != null) {
-                if (i == -1) {
+                if (s.equals("-1")) {
                     buttons[activeY][activeX].setText(" ");
                 } else {
-                    buttons[activeY][activeX].setText(Integer.toString(i));
+                    buttons[activeY][activeX].setText(s);
                 }
             }
         }
@@ -176,18 +211,20 @@ public class SudokuFrame extends JFrame {
     SetupPanel setupPanel;
 
     // Key binding processing function
-    // TODO Create bindings for arrow keys
     private class KeyBindingAction extends AbstractAction {
-        private final int i;
-        KeyBindingAction(int i) {
-            this.i = i;
+        private final String s;
+        KeyBindingAction(String s) {
+            this.s = s;
         }
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            // TODO set active button text to i
             if (settingUp) {
-                setupPanel.changeNumberInActiveCell(i);
+                if (s.equals("UP") || s.equals("DOWN") || s.equals("LEFT") || s.equals("RIGHT")) {
+                    setupPanel.moveActiveCell(s);
+                    return;
+                }
+                setupPanel.changeNumberInActiveCell(s);
             }
         }
     }
@@ -197,12 +234,26 @@ public class SudokuFrame extends JFrame {
         for (int i = 1; i <= 9; i++) {
             this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                     .put(KeyStroke.getKeyStroke(Integer.toString(i)), Integer.toString(i));
-            this.getRootPane().getActionMap().put(Integer.toString(i), new KeyBindingAction(i));
+            this.getRootPane().getActionMap().put(Integer.toString(i), new KeyBindingAction(Integer.toString(i)));
         }
         // Register a new Action for the spacebar to clear the cell
         this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke("SPACE"), " ");
-        this.getRootPane().getActionMap().put(" ", new KeyBindingAction(-1));
+        this.getRootPane().getActionMap().put(" ", new KeyBindingAction("-1"));
+        // Register actions for the arrow keys to move the cell
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("UP"), "UP");
+        this.getRootPane().getActionMap().put("UP", new KeyBindingAction("UP"));
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("DOWN"), "DOWN");
+        this.getRootPane().getActionMap().put("DOWN", new KeyBindingAction("DOWN"));
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("LEFT"), "LEFT");
+        this.getRootPane().getActionMap().put("LEFT", new KeyBindingAction("LEFT"));
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("RIGHT"), "RIGHT");
+        this.getRootPane().getActionMap().put("RIGHT", new KeyBindingAction("RIGHT"));
+
     }
 
     private void setGeneralFrameSettings() {

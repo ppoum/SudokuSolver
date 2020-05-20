@@ -95,6 +95,10 @@ public class Cell {
         return panel;
     }
 
+    public String toString() {
+        return String.valueOf(value);
+    }
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

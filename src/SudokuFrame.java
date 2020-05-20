@@ -319,7 +319,7 @@ public class SudokuFrame extends JFrame {
         // Add button panel
         JPanel buttonPanel = new JPanel();
 
-        JButton nextStepButton = new JButton("Next step");
+        JButton nextStepButton = new JButton("Solve next cell");
         nextStepButton.addActionListener(e -> nextStepAction());
         buttonPanel.add(nextStepButton);
 
@@ -332,7 +332,7 @@ public class SudokuFrame extends JFrame {
 
     // Called by nextStepButton when clicked
     private void nextStepAction() {
-        algorithm.solveStep(board);
+        algorithm.solveCell(board);
         solvingPanel.updateValues();
     }
 

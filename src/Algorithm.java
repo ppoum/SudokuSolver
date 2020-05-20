@@ -1,5 +1,5 @@
 public interface Algorithm {
 
-    void solveStep(Board board);
+    void solveCell(Board board);
 
 }

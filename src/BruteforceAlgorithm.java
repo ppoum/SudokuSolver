@@ -36,6 +36,10 @@ public class BruteforceAlgorithm implements Algorithm {
 
     @Override
     public void solveCell(Board board) {
+        if (board.isSolved()) {
+            return;
+        }
+
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Cell cell = board.getCell(x, y);
@@ -55,7 +59,7 @@ public class BruteforceAlgorithm implements Algorithm {
             if (answer != null) {
                 int pos = answer[0];
                 int value = answer[1];
-                board.getCell(pos, i).setValue(value);
+                board.setCell(pos, i, value);
                 board.calculatePencilMarkings();
                 return;
             }
@@ -68,7 +72,7 @@ public class BruteforceAlgorithm implements Algorithm {
             if (answer != null) {
                 int pos = answer[0];
                 int value = answer[1];
-                board.getCell(i, pos).setValue(value);
+                board.setCell(i, pos, value);
                 board.calculatePencilMarkings();
                 return;
             }
@@ -83,7 +87,7 @@ public class BruteforceAlgorithm implements Algorithm {
                 int value = answer[1];
                 int xPos = (3 * (i % 3)) + (pos % 3);
                 int yPos = (3 * (i / 3)) + (pos / 3);
-                board.getCell(xPos, yPos).setValue(value);
+                board.setCell(xPos, yPos, value);
                 board.calculatePencilMarkings();
                 return;
             }

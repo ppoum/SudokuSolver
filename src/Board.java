@@ -4,10 +4,10 @@ import java.util.List;
 
 public class Board {
     // Helper class
-    private static class Row {
+    private static class Line {
         Cell[] cells;
 
-        public Row(Cell[] cells) {
+        public Line(Cell[] cells) {
             this.cells = cells;
         }
 
@@ -187,19 +187,24 @@ public class Board {
     public boolean isSolved() {
         // Rows
         for (Cell[] row : gameState) {
-            if (!(new Row(row).isValid())) {
+            if (!(new Line(row).isValid())) {
                 return false;
             }
         }
 
         // Columns
         for (int i = 0; i < 9; i++) {
-            if (!(new Row(getColumn(i)).isValid())) {
+            if (!(new Line(getColumn(i)).isValid())) {
                 return false;
             }
         }
 
-        // TODO sub-squares
+        // Subsquares
+        for (int i = 0; i < 9; i++) {
+            if (!(new Line(getSquare(i)).isValid())) {
+                return false;
+            }
+        }
         return true;
     }
 }

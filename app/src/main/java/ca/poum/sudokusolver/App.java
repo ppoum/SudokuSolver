@@ -1,6 +1,8 @@
+package ca.poum.sudokusolver;
+
 import java.util.Base64;
 
-public class SudokuSolver {
+public class App {
 
     public static void main(String[] args) {
         if (args.length == 1) {
@@ -18,6 +20,5 @@ public class SudokuSolver {
             // Create empty SudokuFrame
             new SudokuFrame();
         }
-
     }
 }

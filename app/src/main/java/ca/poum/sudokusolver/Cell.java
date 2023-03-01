@@ -1,5 +1,6 @@
 package ca.poum.sudokusolver;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Cell {
         return value;
     }
 
-    public List<Integer> getPencilMarkings() {
+    public @Nullable List<Integer> getPencilMarkings() {
         return pencilMarkings;
     }
 

@@ -14,8 +14,9 @@ public class BruteforceAlgorithm implements Algorithm {
      * @return An int array with the index and value of the marking seen once or null if no marking appears less than twice
      */
     private int[] getIndexAppearsOnce(Cell[] array) {
-        int[] count = new int[array.length + 1];
-        int[] lastSeen = new int[array.length + 1];
+        // Array size is 10 to have a 9th index (index 0 never used, but code stays cleaner that way)
+        int[] count = new int[10];
+        int[] lastSeen = new int[10];
 
         // Loop through every cell to fill count and lastSeen
         for (int i = 0; i < array.length; i++) {
@@ -97,5 +98,42 @@ public class BruteforceAlgorithm implements Algorithm {
                 return;
             }
         }
+    }
+
+    @Override
+    public void solveIteration(Board board) {
+        if (board.isSolved()) {
+            return;
+        }
+
+        if (solveSingleMarkingCells(board)) {
+            // At least 1 cell filled, stop here
+            return;
+        }
+
+        solveCell(board);
+    }
+
+
+    /**
+     * Iterates over the whole board, and fills in the value for cells that only contain
+     * a single pencil marking value.
+     * @param board The board to iterate over.
+     * @return True if one or more cells were filled, false otherwise.
+     */
+    private boolean solveSingleMarkingCells(Board board) {
+        boolean filled = false;
+
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                Cell c = board.getCell(x, y);
+                List<Integer> markings;
+                if ((markings = c.getPencilMarkings()) != null && markings.size() == 1) {
+                    board.setCell(x, y, markings.get(0));  // Set cell value to only marking
+                    filled = true;
+                }
+            }
+        }
+        return filled;
     }
 }

@@ -337,7 +337,7 @@ public class SudokuFrame extends JFrame {
 
     // Called by nextStepButton when clicked
     private void nextStepAction() {
-        algorithm.solveCell(board);
+        algorithm.solveIteration(board);
         solvingPanel.updateValues();
     }
 

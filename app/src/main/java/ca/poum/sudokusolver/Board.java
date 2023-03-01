@@ -67,6 +67,11 @@ public class Board {
         return gameState[row];
     }
 
+    /**
+     * Calculates every missing number from a row.
+     * @param row The index of the row to use.
+     * @return An array of cells constituting every missing number.
+     */
     public Cell[] getMissingFromRow(int row) {
         List<Integer> missing = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
         for (Cell c : gameState[row]) {
@@ -157,27 +162,11 @@ public class Board {
                     List<Cell> missingColumn = missingColumns.get(x);
                     List<Cell> missingSquare = Arrays.asList(getMissingFromSquare(getSquare(x, y)));
                     List<Integer> markings = new ArrayList<>();
-                    // Iterate smallest array to save some time
-                    if (missingRow.size() <= missingColumn.size() && missingRow.size() <= missingSquare.size()) {
-                        // Iterate missingRow
-                        for (Cell c : missingRow) {
-                            if (twoWayContains(c, missingColumn, missingSquare)) {
-                                markings.add(c.getValue());
-                            }
-                        }
-                    } else if (missingColumn.size() <= missingRow.size() && missingColumn.size() <= missingSquare.size()) {
-                        // Iterate missingColumn
-                        for (Cell c : missingColumn) {
-                            if (twoWayContains(c, missingRow, missingSquare)) {
-                                markings.add(c.getValue());
-                            }
-                        }
-                    } else {
-                        // Iterate missingSquare
-                        for (Cell c : missingSquare) {
-                            if (twoWayContains(c, missingRow, missingColumn)) {
-                                markings.add(c.getValue());
-                            }
+                    for (Cell c : missingRow) {
+                        // If c (which is already missing from row) is also missing from col and square,
+                        // cell could have that value, add to markings
+                        if (twoWayContains(c, missingColumn, missingSquare)) {
+                            markings.add(c.getValue());
                         }
                     }
                     cell.setPencilMarkings(markings);

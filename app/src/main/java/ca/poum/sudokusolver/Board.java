@@ -176,27 +176,12 @@ public class Board {
 
     }
 
+    public int solvedCellCount() {
+        return (int) Arrays.stream(this.gameState).flatMap(row -> Arrays.stream(row))  // Map 2D array to 1D stream
+                .filter(c -> c.getValue() != 0).count();  // Count # of cells that have a value other than 0.
+    }
+
     public boolean isSolved() {
-        // Rows
-        for (Cell[] row : gameState) {
-            if (!(new Line(row).isValid())) {
-                return false;
-            }
-        }
-
-        // Columns
-        for (int i = 0; i < 9; i++) {
-            if (!(new Line(getColumn(i)).isValid())) {
-                return false;
-            }
-        }
-
-        // Subsquares
-        for (int i = 0; i < 9; i++) {
-            if (!(new Line(getSquare(i)).isValid())) {
-                return false;
-            }
-        }
-        return true;
+        return this.solvedCellCount() == 81;
     }
 }

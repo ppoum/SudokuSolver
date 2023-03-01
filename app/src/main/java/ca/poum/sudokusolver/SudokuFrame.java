@@ -311,6 +311,9 @@ public class SudokuFrame extends JFrame {
     Algorithm algorithm;
 
     private void startSolving() {
+        // Set window title
+        this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));
+
         algorithm = new BruteforceAlgorithm(); // Config to change algorithm type? Algorithm factory?
         board.calculatePencilMarkings();
 
@@ -339,6 +342,8 @@ public class SudokuFrame extends JFrame {
     private void nextStepAction() {
         algorithm.solveIteration(board);
         solvingPanel.updateValues();
+        // Update window title
+        this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));
     }
 
     // Constructor
@@ -364,6 +369,7 @@ public class SudokuFrame extends JFrame {
         this.add(buttonPanel, constraints);
 
         setLocationRelativeTo(null);  // Open window in center of screen
+        this.setTitle("Setting up the board");
         setVisible(true);
     }
 

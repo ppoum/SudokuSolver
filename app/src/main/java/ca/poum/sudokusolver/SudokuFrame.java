@@ -363,6 +363,7 @@ public class SudokuFrame extends JFrame {
         constraints.gridy = 1; // Change gridy so the panel is located under the setupPanel
         this.add(buttonPanel, constraints);
 
+        setLocationRelativeTo(null);  // Open window in center of screen
         setVisible(true);
     }
 

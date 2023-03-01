@@ -1,3 +1,8 @@
+package ca.poum.sudokusolver;
+
+import ca.poum.sudokusolver.algorithms.Algorithm;
+import ca.poum.sudokusolver.algorithms.BruteforceAlgorithm;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;

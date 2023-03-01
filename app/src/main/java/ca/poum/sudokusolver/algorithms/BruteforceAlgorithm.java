@@ -1,3 +1,8 @@
+package ca.poum.sudokusolver.algorithms;
+
+import ca.poum.sudokusolver.Board;
+import ca.poum.sudokusolver.Cell;
+
 import java.util.List;
 
 public class BruteforceAlgorithm implements Algorithm {
@@ -12,7 +17,7 @@ public class BruteforceAlgorithm implements Algorithm {
         int[] count = new int[array.length + 1];
         int[] lastSeen = new int[array.length + 1];
 
-        // Loop through ever cell to fill count and lastSeen
+        // Loop through every cell to fill count and lastSeen
         for (int i = 0; i < array.length; i++) {
             Cell c = array[i];
             if (c.getValue() == 0) { // Check if cell has no value

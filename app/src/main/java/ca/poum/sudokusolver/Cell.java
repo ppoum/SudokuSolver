@@ -1,3 +1,5 @@
+package ca.poum.sudokusolver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

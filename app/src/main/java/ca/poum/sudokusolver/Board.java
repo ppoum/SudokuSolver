@@ -24,7 +24,8 @@ public class Board {
                     // Value already removed, is duplicate
                     return false;
                 }
-                wanted.remove(value);
+                // Cast to Integer to signify removing the object w/ value instead of removing object with index
+                wanted.remove(Integer.valueOf(value));
             }
             return true;
         }

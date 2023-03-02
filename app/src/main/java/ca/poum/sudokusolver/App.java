@@ -10,10 +10,14 @@ public class App {
             String encoded = args[0];
             Base64.Decoder decoder = Base64.getDecoder();
             String decoded = new String(decoder.decode(encoded));
-            int[] decodedIntArray = new int[decoded.length()];
-            for (int i = 0; i < decodedIntArray.length; i++) {
-                decodedIntArray[i] = Character.getNumericValue(decoded.charAt(i));
+            int[][] decodedIntArray = new int[9][9];
+
+            for (int i = 0; i < 81; i++) {
+                int col = i % 9;
+                int row = i / 9;
+                decodedIntArray[col][row] = Character.getNumericValue(decoded.charAt(i));
             }
+
             // Create new SudokuFrame with the decodedIntArray;
             new SudokuFrame(decodedIntArray);
         } else {

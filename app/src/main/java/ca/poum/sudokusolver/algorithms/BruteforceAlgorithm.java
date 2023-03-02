@@ -66,7 +66,6 @@ public class BruteforceAlgorithm implements Algorithm {
                 int pos = answer[0];
                 int value = answer[1];
                 board.setCell(pos, i, value);
-                board.calculatePencilMarkings();
                 return;
             }
         }
@@ -79,7 +78,6 @@ public class BruteforceAlgorithm implements Algorithm {
                 int pos = answer[0];
                 int value = answer[1];
                 board.setCell(i, pos, value);
-                board.calculatePencilMarkings();
                 return;
             }
         }
@@ -94,7 +92,6 @@ public class BruteforceAlgorithm implements Algorithm {
                 int xPos = (3 * (i % 3)) + (pos % 3);
                 int yPos = (3 * (i / 3)) + (pos / 3);
                 board.setCell(xPos, yPos, value);
-                board.calculatePencilMarkings();
                 return;
             }
         }
@@ -108,10 +105,12 @@ public class BruteforceAlgorithm implements Algorithm {
 
         if (solveSingleMarkingCells(board)) {
             // At least 1 cell filled, stop here
+            board.calculatePencilMarkings();
             return;
         }
 
         solveCell(board);
+        board.calculatePencilMarkings();
     }
 
 

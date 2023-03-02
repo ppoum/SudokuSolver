@@ -5,36 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Board {
-    // Helper class
-    private static class Line {
-        Cell[] cells;
-
-        public Line(Cell[] cells) {
-            this.cells = cells;
-        }
-
-        public boolean isValid() {
-            List<Integer> wanted = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-            for (Cell c : cells) {
-                int value = c.getValue();
-                if (value == 0) {
-                    return false;
-                }
-                if (!wanted.contains(value)) {
-                    // Value already removed, is duplicate
-                    return false;
-                }
-                // Cast to Integer to signify removing the object w/ value instead of removing object with index
-                wanted.remove(Integer.valueOf(value));
-            }
-            return true;
-        }
-    }
 
     private final Cell[][] gameState;
 
     public Board() {
         gameState = new Cell[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                gameState[y][x] = new Cell();
+            }
+        }
     }
 
     public Board(int[][] existingState) {
@@ -45,6 +25,43 @@ public class Board {
                 gameState[y][x] = (i == 0) ? new Cell() : new Cell(i);
             }
         }
+
+        // Validate board
+        for (int row = 0; row < 9; row++) {
+            List<Integer> seen = new ArrayList<>();
+            for (int col = 0; col < 9; col++) {
+                int v = this.getCell(col, row).getValue();
+                if (v != 0 && seen.contains(v)) {
+                    throw new IllegalArgumentException("Invalid board state");
+                }
+                seen.add(v);
+            }
+        }
+
+        for (int col = 0; col < 9; col++) {
+            List<Integer> seen = new ArrayList<>();
+            for (int row = 0; row < 9; row++) {
+                int v = this.getCell(col, row).getValue();
+                if (v != 0 && seen.contains(v)) {
+                    throw new IllegalArgumentException("Invalid board state");
+                }
+                seen.add(v);
+            }
+        }
+
+        for (int square = 0; square < 9; square++) {
+            List<Integer> seen = new ArrayList<>();
+            for (Cell c : this.getSquare(square)) {
+                int v = c.getValue();
+                if (v != 0 && seen.contains(v)) {
+                    throw new IllegalArgumentException("Invalid board state");
+                }
+                seen.add(v);
+            }
+        }
+
+        // If no exception thrown, valid board, calculate markings
+        this.calculatePencilMarkings();
     }
 
     public Cell[][] getGameState() {
@@ -56,11 +73,12 @@ public class Board {
     }
 
     public int getSquare(int x, int y) {
-        return (y/3) * 3 + (x/3) % 3;
+        return (y / 3) * 3 + (x / 3) % 3;
     }
 
     public void setCell(int x, int y, int value) {
         gameState[y][x] = new Cell(value);
+        this.calculateCellPencilMarkings(x, y);
     }
 
     public Cell[] getRow(int row) {
@@ -69,6 +87,7 @@ public class Board {
 
     /**
      * Calculates every missing number from a row.
+     *
      * @param row The index of the row to use.
      * @return An array of cells constituting every missing number.
      */
@@ -140,6 +159,27 @@ public class Board {
         return (listA.contains(cell) && listB.contains(cell));
     }
 
+    public void calculateCellPencilMarkings(int x, int y) {
+        Cell cell = getCell(x, y);
+        if (cell.getValue() != 0) {
+            // No markings for cells with values
+            return;
+        }
+
+        Cell[] missingRow = getMissingFromRow(y);
+        List<Cell> missingCol = Arrays.asList(getMissingFromColumn(x));
+        List<Cell> missingSquare = Arrays.asList(getMissingFromSquare(getSquare(x, y)));
+
+        List<Integer> markings = new ArrayList<>();
+        for (Cell c : missingRow) {
+            if (twoWayContains(c, missingCol, missingSquare)) {
+                // Cell value missing for row, col and square, add to pencil markings
+                markings.add(c.getValue());
+            }
+        }
+        cell.setPencilMarkings(markings);
+    }
+
     public void calculatePencilMarkings() {
         List<List<Cell>> missingRows = new ArrayList<>();
         List<List<Cell>> missingColumns = new ArrayList<>();
@@ -156,21 +196,21 @@ public class Board {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Cell cell = getCell(x, y);
-                if (cell.getValue() == 0) {
-                    // Empty cell, recalculate pencil markings
-                    List<Cell> missingRow = missingRows.get(y);
-                    List<Cell> missingColumn = missingColumns.get(x);
-                    List<Cell> missingSquare = Arrays.asList(getMissingFromSquare(getSquare(x, y)));
-                    List<Integer> markings = new ArrayList<>();
-                    for (Cell c : missingRow) {
-                        // If c (which is already missing from row) is also missing from col and square,
-                        // cell could have that value, add to markings
-                        if (twoWayContains(c, missingColumn, missingSquare)) {
-                            markings.add(c.getValue());
-                        }
+                if (cell.getValue() != 0) continue;
+                // Empty cell, recalculate pencil markings
+                List<Cell> missingRow = missingRows.get(y);
+                List<Cell> missingColumn = missingColumns.get(x);
+                List<Cell> missingSquare = Arrays.asList(getMissingFromSquare(getSquare(x, y)));
+                List<Integer> markings = new ArrayList<>();
+                for (Cell c : missingRow) {
+                    // If c (which is already missing from row) is also missing from col and square,
+                    // cell could have that value, add to markings
+                    if (twoWayContains(c, missingColumn, missingSquare)) {
+                        markings.add(c.getValue());
                     }
-                    cell.setPencilMarkings(markings);
                 }
+                cell.setPencilMarkings(markings);
+
             }
         }
 

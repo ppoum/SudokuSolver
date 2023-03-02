@@ -64,10 +64,6 @@ public class Board {
         this.calculatePencilMarkings();
     }
 
-    public Cell[][] getGameState() {
-        return gameState;
-    }
-
     public Cell getCell(int x, int y) {
         return gameState[y][x];
     }
@@ -217,7 +213,7 @@ public class Board {
     }
 
     public int solvedCellCount() {
-        return (int) Arrays.stream(this.gameState).flatMap(row -> Arrays.stream(row))  // Map 2D array to 1D stream
+        return (int) Arrays.stream(this.gameState).flatMap(Arrays::stream)  // Map 2D array to 1D stream
                 .filter(c -> c.getValue() != 0).count();  // Count # of cells that have a value other than 0.
     }
 

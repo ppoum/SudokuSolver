@@ -43,46 +43,6 @@ public class Cell {
     }
 
     // Converters
-    public JPanel toJPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.white);
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-
-        if (this.getValue() != 0) {
-            // Has set value, use big number
-            JLabel l = new JLabel(Integer.toString(this.getValue()), SwingConstants.CENTER);
-            l.setForeground(Color.black);
-            l.setFont(new Font("Arial", Font.BOLD, 30));
-            c.anchor = GridBagConstraints.CENTER;
-            panel.add(l, c);
-        } else {
-            // No set value, use pencil markings
-
-            // Anchor array to set each pencil markings in the corners
-            int[] anchors = new int[]
-                    {GridBagConstraints.FIRST_LINE_START, GridBagConstraints.PAGE_START, GridBagConstraints.FIRST_LINE_END,
-                            GridBagConstraints.LINE_START, GridBagConstraints.CENTER, GridBagConstraints.LINE_END,
-                            GridBagConstraints.LAST_LINE_END, GridBagConstraints.PAGE_END, GridBagConstraints.LAST_LINE_END};
-            c.weightx = 1;
-            c.weighty = 1;
-
-            Font pencilFont = new Font("Arial", Font.PLAIN, 12);
-            for (int i = 0; i < 9; i++) {
-                c.gridx = i % 3;
-                c.gridy = i / 3;
-                c.anchor = anchors[i];
-                String text = (pencilMarkings.contains(i + 1)) ? Integer.toString(i + 1) : " ";
-                JLabel l = new JLabel(text, SwingConstants.CENTER);
-                l.setForeground(Color.gray);
-                l.setFont(pencilFont);
-                panel.add(l, c);
-            }
-        }
-        return panel;
-    }
-
     public JButton toJButton(ActionListener l) {
         JButton button = new JButton();
 

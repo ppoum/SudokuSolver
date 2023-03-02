@@ -9,7 +9,7 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 public class SudokuPanel extends SquareJPanel {
-    private Board board;
+    private final Board board;
     private final JButton[][] gridButtons = new JButton[9][9];
     private boolean inSetupMode = true;
     private Integer activeX, activeY;
@@ -145,7 +145,7 @@ public class SudokuPanel extends SquareJPanel {
                 if (gridButtons[row][col].getComponents().length == 1) {
                     // 1 component means big number, value defined
                     JLabel label = (JLabel) component;
-                    val[row][col] = Integer.parseInt(label.toString());
+                    val[row][col] = Integer.parseInt(label.getText());
                 } else {
                     // More than 1 component, no value defined
                     val[row][col] = 0;

@@ -23,6 +23,8 @@ public class BruteforceAlgorithm implements Algorithm {
             Cell c = array[i];
             if (c.getValue() == 0) { // Check if cell has no value
                 List<Integer> markings = c.getPencilMarkings();
+                if (markings == null) continue;
+
                 for (Integer mark : markings) {
                     count[mark]++;
                     lastSeen[mark] = i;

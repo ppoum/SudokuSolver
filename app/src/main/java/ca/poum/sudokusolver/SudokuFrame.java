@@ -2,12 +2,12 @@ package ca.poum.sudokusolver;
 
 import ca.poum.sudokusolver.algorithms.Algorithm;
 import ca.poum.sudokusolver.algorithms.BruteforceAlgorithm;
+import ca.poum.sudokusolver.ui.B64Popup;
 import ca.poum.sudokusolver.ui.SudokuPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Base64;
 
 public class SudokuFrame extends JFrame {
 
@@ -135,6 +135,7 @@ public class SudokuFrame extends JFrame {
      * Creates a panel containing the "Finish" and "Export" buttons. The finish button
      * lets the program enter the solving stage, and export calculates the b64 representation
      * of the current grid.
+     *
      * @return The panel containing both buttons.
      */
     private JPanel createSetupButtonsPanel() {
@@ -150,17 +151,7 @@ public class SudokuFrame extends JFrame {
         // TODO Create a popup with a text zone with the b64 string instead of printing to console.
         JButton exportButton = new JButton("Export");
         exportButton.setFocusable(false);
-        exportButton.addActionListener(e -> {
-            int[][] numbers = sudokuPanel.toIntMatrix();
-            StringBuilder sb = new StringBuilder();
-            for (int[] row : numbers) {
-                for (int i : row) {
-                    sb.append(i);
-                }
-            }
-            String encoded = new String(Base64.getEncoder().encode(sb.toString().getBytes()));
-            System.out.println(encoded);
-        });
+        exportButton.addActionListener(e -> new B64Popup(this, sudokuPanel));
         buttonPanel.add(exportButton);
 
         return buttonPanel;

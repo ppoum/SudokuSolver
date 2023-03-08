@@ -43,9 +43,9 @@ public class BruteforceAlgorithm implements Algorithm {
     }
 
     @Override
-    public void solveCell(Board board) {
+    public boolean solveCell(Board board) {
         if (board.isSolved()) {
-            return;
+            return false;
         }
 
         for (int y = 0; y < 9; y++) {
@@ -55,7 +55,7 @@ public class BruteforceAlgorithm implements Algorithm {
                 if (cell.getValue() == 0 && cell.getPencilMarkings().size() == 1) {
                     cell.setValue(cell.getPencilMarkings().get(0));
                     board.calculatePencilMarkings();
-                    return;
+                    return true;
                 }
             }
         }
@@ -68,7 +68,7 @@ public class BruteforceAlgorithm implements Algorithm {
                 int pos = answer[0];
                 int value = answer[1];
                 board.setCell(pos, i, value);
-                return;
+                return true;
             }
         }
 
@@ -80,7 +80,7 @@ public class BruteforceAlgorithm implements Algorithm {
                 int pos = answer[0];
                 int value = answer[1];
                 board.setCell(i, pos, value);
-                return;
+                return true;
             }
         }
 
@@ -94,25 +94,29 @@ public class BruteforceAlgorithm implements Algorithm {
                 int xPos = (3 * (i % 3)) + (pos % 3);
                 int yPos = (3 * (i / 3)) + (pos / 3);
                 board.setCell(xPos, yPos, value);
-                return;
+                return true;
             }
         }
+
+        // Didn't fill in any cells
+        return false;
     }
 
     @Override
-    public void solveIteration(Board board) {
+    public boolean solveIteration(Board board) {
         if (board.isSolved()) {
-            return;
+            return false;
         }
 
         if (solveSingleMarkingCells(board)) {
             // At least 1 cell filled, stop here
             board.calculatePencilMarkings();
-            return;
+            return true;
         }
 
-        solveCell(board);
+        boolean changedCell = solveCell(board);
         board.calculatePencilMarkings();
+        return changedCell;
     }
 
 

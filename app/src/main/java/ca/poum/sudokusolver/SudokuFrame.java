@@ -88,6 +88,9 @@ public class SudokuFrame extends JFrame {
         JButton nextStepButton = new JButton("Solve next cell");
         nextStepButton.addActionListener(e -> nextStepAction());
         buttonPanel.add(nextStepButton);
+        JButton solveAllButton = new JButton("Solve all");
+        solveAllButton.addActionListener(e -> solveAll());
+        buttonPanel.add(solveAllButton);
 
         constraints.gridx++;
         this.add(buttonPanel, constraints);
@@ -102,6 +105,22 @@ public class SudokuFrame extends JFrame {
         sudokuPanel.updateGridValues();
         // Update window title
         this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));
+    }
+
+    private void solveAll() {
+        while (true) {
+            // Exit loop once algorithm can't change anything
+            if (!algorithm.solveIteration(board)) break;
+        }
+
+        sudokuPanel.updateGridValues();
+        this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));
+
+        if (board.isSolved()) return;
+
+        // Board isn't solved, but algorithm didn't make any changes, algo is stuck, alert user
+        JOptionPane.showMessageDialog(this, "The algorithm was unable to solve this Sudoku board.",
+                "Error solving Sudoku", JOptionPane.ERROR_MESSAGE);
     }
 
     public void createSetupView() {
@@ -159,7 +178,8 @@ public class SudokuFrame extends JFrame {
 
     // Constructor
     public SudokuFrame() {
-        this(null);
+        board = new Board();
+        createSetupView();
     }
 
     public SudokuFrame(int[][] presetGrid) {

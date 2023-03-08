@@ -101,7 +101,7 @@ public class SudokuFrame extends JFrame {
 
     // Called by nextStepButton when clicked
     private void nextStepAction() {
-        algorithm.solveIteration(board);
+        algorithm.solveCell(board);
         sudokuPanel.updateGridValues();
         // Update window title
         this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));

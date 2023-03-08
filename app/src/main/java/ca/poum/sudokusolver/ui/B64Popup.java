@@ -8,18 +8,18 @@ import java.awt.event.FocusListener;
 import java.util.Base64;
 
 public class B64Popup {
-    static class FocusTextField extends JTextField {
-        public FocusTextField(String text) {
+    static class FocusTextArea extends JTextArea {
+        public FocusTextArea(String text) {
             super(text);
             addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
-                    FocusTextField.this.select(0, getText().length());
+                    FocusTextArea.this.select(0, getText().length());
                 }
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    FocusTextField.this.select(0, 0);
+                    FocusTextArea.this.select(0, 0);
                 }
             });
         }
@@ -50,9 +50,14 @@ public class B64Popup {
 
     private JPanel createPanel(String b64) {
         JPanel panel = new JPanel();
-        FocusTextField textField = new FocusTextField(b64);
-        textField.setEditable(false);
-        panel.add(textField);
+        FocusTextArea textArea = new FocusTextArea(b64);
+        textArea.setEditable(false);
+
+        // Set max # of columns, wrap text to new line
+        textArea.setLineWrap(true);
+        textArea.setColumns(40);
+
+        panel.add(textArea);
         return panel;
     }
 

@@ -101,7 +101,14 @@ public class SudokuFrame extends JFrame {
 
     // Called by nextStepButton when clicked
     private void nextStepAction() {
-        algorithm.solveCell(board);
+        boolean changed = algorithm.solveCell(board);
+
+        if (!changed && !board.isSolved()) {
+            // No change, but board is still not solved, algo stuck
+            JOptionPane.showMessageDialog(this, "The algorithm was unable to solve this Sudoku board.",
+                    "Error solving Sudoku", JOptionPane.ERROR_MESSAGE);
+        }
+
         sudokuPanel.updateGridValues();
         // Update window title
         this.setTitle(String.format("Solving board: %d/81", board.solvedCellCount()));

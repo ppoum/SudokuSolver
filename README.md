@@ -12,7 +12,7 @@ Very basic sudoku solver using a Swing GUI
   
   An optional `b64_grid` argument can be passed in to preload a Sudoku grid. The base64 string of a grid can be obtained by using the exporting feature of the application.
   
-  * `./gradlew run [--args="b64_grid"]` 
+  * `./gradlew run` or `./gradlew run --args="[b64_grid]"` 
   * `java -jar app/build/libs/sudokuSolver.jar [b64_grid]`
   
   
